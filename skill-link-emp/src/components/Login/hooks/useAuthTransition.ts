@@ -1,9 +1,10 @@
 import { useState, useCallback, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { registerUser, loginUser, forgotPassword } from '../api/auth';
 import type { AuthMode, FormData, UserRole, UserInterest, LoginRequest, AuthResponse, RegisterRequest } from '../types/auth';
 
-
 export const useAuthTransition = () => {
+    const navigate = useNavigate();
     const [authMode, setAuthMode] = useState<AuthMode>('login');
     const [isTransitioning, setIsTransitioning] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
@@ -130,18 +131,29 @@ export const useAuthTransition = () => {
                 }
 
                 const requestData: RegisterRequest = {
-                    nombre: formData.firstName,
-                    apellido: formData.lastName,
-                    correo: formData.email,
-                    contra: formData.password,
-                    rol: formData.role as UserRole,
-                    intereses: formData.interests
+                    name: formData.firstName,
+                    secondName: formData.lastName,
+                    email: formData.email,
+                    password: formData.password,
+                    role: formData.role as UserRole,
+                    interests: formData.interests
                 };
 
-                await registerUser(requestData);
-                setApiMessage('¡Registro exitoso! Ya puedes iniciar sesión.');
+                const response = await registerUser(requestData);
+                
+                // Guardar token y datos del usuario
+                sessionStorage.setItem('jwt_token', response.token);
+                sessionStorage.setItem('user_info', JSON.stringify(response.user));
+                
+                setApiMessage('¡Registro exitoso! Redirigiendo...');
                 setIsError(false);
                 resetForm();
+                
+                // Redirigir después de un breve delay
+                setTimeout(() => {
+                    navigate('/home');
+                }, 1500);
+                
             } else if (authMode === 'login') {
                 const requestData: LoginRequest = {
                     email: formData.email,
@@ -149,12 +161,16 @@ export const useAuthTransition = () => {
                 };
 
                 const authResponse: AuthResponse = await loginUser(requestData);
-                console.log('Login exitoso:', authResponse);
-                console.log('Token JWT recibido:', authResponse.token);
-
-                setApiMessage('¡Inicio de sesión exitoso! Revisa la consola para ver el token.');
+                
+                setApiMessage('¡Inicio de sesión exitoso! Redirigiendo...');
                 setIsError(false);
                 resetForm();
+                
+                // Redirigir después de un breve delay
+                setTimeout(() => {
+                    navigate('/home');
+                }, 1500);
+                
             } else if (authMode === 'forgot') {
                 if (!formData.email) {
                     setApiMessage('Por favor ingresa tu correo electrónico.');
@@ -177,7 +193,7 @@ export const useAuthTransition = () => {
         } finally {
             setIsLoading(false);
         }
-    }, [authMode, formData, resetForm, passwordValidation.isValid]);
+    }, [authMode, formData, resetForm, passwordValidation.isValid, navigate]);
 
     return {
         authMode,

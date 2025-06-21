@@ -52,7 +52,6 @@ public class User implements UserDetails {
     @CreationTimestamp
     private LocalDateTime registrationDate;
 
-
     public User() {}
 
     public User(UserRegisterRequest userRegisterRequest){
@@ -61,9 +60,11 @@ public class User implements UserDetails {
         this.email = userRegisterRequest.email();
         this.password = userRegisterRequest.password();
         this.role = userRegisterRequest.role();
-        this.registrationDate = LocalDateTime.now(); // Set registration date to now
+        this.intereses = userRegisterRequest.interests();
+        this.registrationDate = LocalDateTime.now();
     }
 
+    // Getters y Setters
     public Long getId() {
         return id;
     }
@@ -121,6 +122,14 @@ public class User implements UserDetails {
         this.active = active;
     }
 
+    public List<UserInterest> getIntereses() {
+        return intereses;
+    }
+
+    public void setIntereses(List<UserInterest> intereses) {
+        this.intereses = intereses;
+    }
+
     public LocalDateTime getRegistrationDate() {
         return registrationDate;
     }
@@ -129,6 +138,7 @@ public class User implements UserDetails {
         this.registrationDate = registrationDate;
     }
 
+    // UserDetails implementation
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_" + this.role.name()));
@@ -158,5 +168,4 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return this.active;
     }
-
 }

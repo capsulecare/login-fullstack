@@ -7,12 +7,11 @@ import type {
     ForgotPasswordResponse
 } from '../types/auth';
 
-const API_BASE_URL = 'http://localhost:8080/api';
-
+const API_BASE_URL = 'http://localhost:8080';
 
 export const registerUser = async (userData: RegisterRequest): Promise<RegisterResponse> => {
     try {
-        const response = await fetch(`${API_BASE_URL}/users/register`, {
+        const response = await fetch(`${API_BASE_URL}/usuarios/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -41,7 +40,7 @@ export const registerUser = async (userData: RegisterRequest): Promise<RegisterR
 
 export const loginUser = async (credentials: LoginRequest): Promise<AuthResponse> => {
     try {
-        const response = await fetch(`${API_BASE_URL}/users/login`, {
+        const response = await fetch(`${API_BASE_URL}/usuarios/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -62,11 +61,15 @@ export const loginUser = async (credentials: LoginRequest): Promise<AuthResponse
 
         const data: AuthResponse = await response.json();
 
+        // Guardar token y datos del usuario
         sessionStorage.setItem('jwt_token', data.token);
         sessionStorage.setItem('user_info', JSON.stringify({
             userId: data.userId,
+            name: data.name,
+            secondName: data.secondName,
             email: data.email,
-            role: data.role
+            role: data.role,
+            interests: data.interests
         }));
 
         return data;
@@ -82,7 +85,7 @@ export const forgotPassword = async (email: string): Promise<ForgotPasswordRespo
             correo: email
         };
 
-        const response = await fetch(`${API_BASE_URL}/auth/forgot-password`, {
+        const response = await fetch(`${API_BASE_URL}/usuarios/recover-password`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -111,7 +114,7 @@ export const forgotPassword = async (email: string): Promise<ForgotPasswordRespo
 
 export const validateResetToken = async (token: string): Promise<ForgotPasswordResponse> => {
     try {
-        const response = await fetch(`${API_BASE_URL}/auth/validate-reset-token?token=${encodeURIComponent(token)}`, {
+        const response = await fetch(`${API_BASE_URL}/usuarios/validate-reset-token?token=${encodeURIComponent(token)}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -144,7 +147,7 @@ export const resetPassword = async (token: string, newPassword: string): Promise
             nuevaContra: newPassword
         };
 
-        const response = await fetch(`${API_BASE_URL}/auth/reset-password`, {
+        const response = await fetch(`${API_BASE_URL}/usuarios/reset-password`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
