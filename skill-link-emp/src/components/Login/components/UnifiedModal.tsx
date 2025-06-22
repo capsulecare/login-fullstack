@@ -231,7 +231,7 @@ export const UnifiedModal: React.FC<UnifiedModalProps> = ({
               <button
                 onClick={handleClose}
                 disabled={!canProceed}
-                className={`flex-2 cursor-pointer font-semibold py-2.5 px-4 rounded-xl transition-all duration-300 transform hover:scale-[1.01] text-sm ${
+                className={`flex-1 cursor-pointer font-semibold py-2.5 px-4 rounded-xl transition-all duration-300 transform hover:scale-[1.01] text-sm ${
                   canProceed
                     ? 'bg-gradient-to-r from-cyan-600 to-emerald-600 text-white hover:from-cyan-700 hover:to-emerald-700'
                     : 'bg-white/10 text-white/50 cursor-not-allowed'
