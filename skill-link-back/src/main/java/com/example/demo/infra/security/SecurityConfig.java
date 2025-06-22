@@ -41,7 +41,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST,
                                 "/usuarios/login",
                                 "/usuarios/register",
-                                "/usuarios/recover-password")
+                                "/usuarios/recover-password",
+                                "/usuarios/reset-password")
+                        .permitAll()
+                        .requestMatchers(HttpMethod.GET,
+                                "/usuarios/validate-reset-token")
                         .permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

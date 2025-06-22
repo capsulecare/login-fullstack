@@ -33,6 +33,10 @@ public class UserService implements UserDetailsService {
         return userRepository.save(user);
     }
 
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         UserDetails user = userRepository.findByEmail(email);

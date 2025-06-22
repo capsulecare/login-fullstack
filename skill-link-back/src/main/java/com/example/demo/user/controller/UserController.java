@@ -124,4 +124,100 @@ public class UserController {
                 .body(Map.of("error", "Error interno del servidor."));
         }
     }
+
+    @PostMapping("/recover-password")
+    public ResponseEntity<?> recoverPassword(@RequestBody Map<String, String> request){
+        try{
+            String email = request.get("correo");
+            System.out.println("=== RECUPERACIÓN DE CONTRASEÑA ===");
+            System.out.println("Email solicitado: " + email);
+            
+            if(email == null || email.trim().isEmpty()) {
+                return ResponseEntity.badRequest()
+                    .body(Map.of("mensaje", "El email es requerido", "exito", false));
+            }
+            
+            // Verificar si el usuario existe (solo para logs internos)
+            boolean userExists = userService.existsByEmail(email);
+            if(userExists) {
+                System.out.println("✓ Usuario encontrado: " + email);
+                // Aquí iría la lógica de envío de email
+                System.out.println("📧 Se enviaría email de recuperación a: " + email);
+            } else {
+                System.out.println("✗ Usuario NO encontrado: " + email);
+                // No revelamos si el usuario existe o no
+            }
+            
+            // SIEMPRE devolver el mismo mensaje exitoso para no revelar si el email existe
+            return ResponseEntity.ok(Map.of(
+                "mensaje", "Si el email está registrado, recibirás un enlace de recuperación en tu bandeja de entrada.",
+                "exito", true
+            ));
+            
+        } catch (Exception e) {
+            System.err.println("Error en recuperación de contraseña: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(500)
+                .body(Map.of("mensaje", "Estamos en mantenimiento. Intenta más tarde.", "exito", false));
+        }
+    }
+
+    @GetMapping("/validate-reset-token")
+    public ResponseEntity<?> validateResetToken(@RequestParam String token){
+        try{
+            System.out.println("=== VALIDACIÓN DE TOKEN ===");
+            System.out.println("Token recibido: " + token);
+            
+            // Por ahora, simulamos que todos los tokens son válidos
+            // En producción aquí validarías el token contra la base de datos
+            if(token != null && !token.trim().isEmpty()) {
+                System.out.println("✓ Token válido (simulado)");
+                return ResponseEntity.ok(Map.of(
+                    "mensaje", "Token válido",
+                    "exito", true,
+                    "correo", "usuario@ejemplo.com" // Email simulado
+                ));
+            } else {
+                System.out.println("✗ Token inválido");
+                return ResponseEntity.badRequest()
+                    .body(Map.of("mensaje", "Token inválido o expirado", "exito", false));
+            }
+            
+        } catch (Exception e) {
+            System.err.println("Error validando token: " + e.getMessage());
+            return ResponseEntity.status(500)
+                .body(Map.of("mensaje", "Estamos en mantenimiento. Intenta más tarde.", "exito", false));
+        }
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody Map<String, String> request){
+        try{
+            String token = request.get("token");
+            String newPassword = request.get("nuevaContra");
+            
+            System.out.println("=== CAMBIO DE CONTRASEÑA ===");
+            System.out.println("Token: " + token);
+            System.out.println("Nueva contraseña recibida: " + (newPassword != null ? "✓" : "✗"));
+            
+            if(token == null || newPassword == null || token.trim().isEmpty() || newPassword.trim().isEmpty()) {
+                return ResponseEntity.badRequest()
+                    .body(Map.of("mensaje", "Token y nueva contraseña son requeridos", "exito", false));
+            }
+            
+            // Por ahora simulamos que el cambio es exitoso
+            // En producción aquí cambiarías la contraseña en la base de datos
+            System.out.println("✓ Contraseña cambiada exitosamente (simulado)");
+            
+            return ResponseEntity.ok(Map.of(
+                "mensaje", "Contraseña cambiada exitosamente. Ya puedes iniciar sesión.",
+                "exito", true
+            ));
+            
+        } catch (Exception e) {
+            System.err.println("Error cambiando contraseña: " + e.getMessage());
+            return ResponseEntity.status(500)
+                .body(Map.of("mensaje", "Estamos en mantenimiento. Intenta más tarde.", "exito", false));
+        }
+    }
 }
