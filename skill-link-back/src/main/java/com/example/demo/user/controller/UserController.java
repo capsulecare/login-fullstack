@@ -8,9 +8,13 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -31,7 +35,8 @@ public class UserController {
         try{
             // Validar que no sea admin
             if(userRegisterRequest.role().name().equals("Admin")) {
-                return ResponseEntity.badRequest().body("No se puede registrar un usuario con el rol ADMIN directamente. Use el endpoint de administración.");
+                return ResponseEntity.badRequest()
+                    .body(Map.of("error", "No se puede registrar un usuario con el rol ADMIN directamente."));
             }
 
             // Registrar usuario
@@ -47,14 +52,18 @@ public class UserController {
                 user.getSecondName(), 
                 user.getEmail(), 
                 user.getRole(),
-                user.getInterests()  // <-- Ahora funciona con getInterests()
+                user.getInterests()
             );
             
             UserRegisterResponse response = new UserRegisterResponse(jwtToken, userResponse);
             
             return ResponseEntity.ok(response);
-        }catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error al registrar el usuario: " + e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest()
+                .body(Map.of("error", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                .body(Map.of("error", "Error interno del servidor. Inténtalo de nuevo."));
         }
     }
 
@@ -79,12 +88,19 @@ public class UserController {
                 user.getSecondName(),
                 user.getEmail(),
                 user.getRole(),
-                user.getInterests()  // <-- Ahora funciona con getInterests()
+                user.getInterests()
             );
             
             return ResponseEntity.ok(response);
-        }catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error al iniciar sesión: " + e.getMessage());
+        } catch (BadCredentialsException e) {
+            return ResponseEntity.status(401)
+                .body(Map.of("error", "Email o contraseña incorrectos. Verifica tus credenciales."));
+        } catch (AuthenticationException e) {
+            return ResponseEntity.status(401)
+                .body(Map.of("error", "Error de autenticación. Verifica tus credenciales."));
+        } catch (Exception e) {
+            return ResponseEntity.status(500)
+                .body(Map.of("error", "Error interno del servidor. Inténtalo de nuevo."));
         }
     }
 }
