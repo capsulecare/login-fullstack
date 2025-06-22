@@ -141,10 +141,6 @@ export const useAuthTransition = () => {
 
                 const response = await registerUser(requestData);
                 
-                // Guardar token y datos del usuario
-                sessionStorage.setItem('jwt_token', response.token);
-                sessionStorage.setItem('user_info', JSON.stringify(response.user));
-                
                 setApiMessage('¡Registro exitoso! Redirigiendo...');
                 setIsError(false);
                 resetForm();

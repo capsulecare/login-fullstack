@@ -44,6 +44,11 @@ export const registerUser = async (userData: RegisterRequest): Promise<RegisterR
         }
 
         const data: RegisterResponse = await response.json();
+        
+        // Guardar token y datos del usuario automáticamente
+        sessionStorage.setItem('jwt_token', data.token);
+        sessionStorage.setItem('user_info', JSON.stringify(data.user));
+        
         return data;
     } catch (error) {
         console.error('Error en la llamada a la API de registro:', error);
