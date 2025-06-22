@@ -34,19 +34,29 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
+                        // Swagger
                         .requestMatchers("/swagger-ui.html", "/v3/api-docs/**", "/swagger-ui/**", "/v3/api-docs/swagger-config", "/swagger-resources/**", "/webjars/**")
                         .permitAll()
+                        
+                        // CORS preflight
                         .requestMatchers(HttpMethod.OPTIONS, "/**")
                         .permitAll()
-                        .requestMatchers(HttpMethod.POST,
-                                "/usuarios/login",
-                                "/usuarios/register",
-                                "/usuarios/recover-password",
-                                "/usuarios/reset-password")
+                        
+                        // Endpoints públicos de autenticación
+                        .requestMatchers(HttpMethod.POST, "/usuarios/login", "/usuarios/register")
                         .permitAll()
-                        .requestMatchers(HttpMethod.GET,
-                                "/usuarios/validate-reset-token")
+                        
+                        // Endpoints públicos de recuperación de contraseña
+                        .requestMatchers(HttpMethod.POST, "/usuarios/recover-password", "/usuarios/reset-password")
                         .permitAll()
+                        .requestMatchers(HttpMethod.GET, "/usuarios/validate-reset-token")
+                        .permitAll()
+                        
+                        // Endpoint de limpieza (solo para admin/mantenimiento)
+                        .requestMatchers(HttpMethod.DELETE, "/usuarios/cleanup-expired-tokens")
+                        .permitAll() // Cambiar a .hasRole("ADMIN") cuando tengas autenticación de admin
+                        
+                        // Todo lo demás requiere autenticación
                         .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
