@@ -23,9 +23,22 @@ export const registerUser = async (userData: RegisterRequest): Promise<RegisterR
             let errorMessage = 'Error desconocido al registrar el usuario.';
             try {
                 const errorBody = await response.json();
-                errorMessage = errorBody.message || errorBody.error || `Error ${response.status}: ${response.statusText}`;
+                errorMessage = errorBody.error || errorBody.message || `Error ${response.status}: ${response.statusText}`;
             } catch (jsonError) {
-                errorMessage = `Error ${response.status}: ${response.statusText}`;
+                // Si no hay JSON, usar mensaje basado en el código de estado
+                switch (response.status) {
+                    case 400:
+                        errorMessage = 'Datos de registro inválidos. Verifica la información ingresada.';
+                        break;
+                    case 409:
+                        errorMessage = 'El email ya está registrado. Intenta con otro email.';
+                        break;
+                    case 500:
+                        errorMessage = 'Error interno del servidor. Inténtalo de nuevo más tarde.';
+                        break;
+                    default:
+                        errorMessage = `Error ${response.status}: ${response.statusText}`;
+                }
             }
             throw new Error(errorMessage);
         }
@@ -52,9 +65,25 @@ export const loginUser = async (credentials: LoginRequest): Promise<AuthResponse
             let errorMessage = 'Error desconocido al iniciar sesión.';
             try {
                 const errorBody = await response.json();
-                errorMessage = errorBody.message || errorBody.error || `Error ${response.status}: ${response.statusText}`;
+                errorMessage = errorBody.error || errorBody.message || `Error ${response.status}: ${response.statusText}`;
             } catch (jsonError) {
-                errorMessage = `Error ${response.status}: ${response.statusText}`;
+                // Si no hay JSON, usar mensaje basado en el código de estado
+                switch (response.status) {
+                    case 401:
+                        errorMessage = 'Email o contraseña incorrectos. Verifica tus credenciales.';
+                        break;
+                    case 403:
+                        errorMessage = 'Acceso denegado. Tu cuenta puede estar desactivada.';
+                        break;
+                    case 404:
+                        errorMessage = 'Usuario no encontrado. Verifica tu email.';
+                        break;
+                    case 500:
+                        errorMessage = 'Error interno del servidor. Inténtalo de nuevo más tarde.';
+                        break;
+                    default:
+                        errorMessage = `Error de conexión. Código: ${response.status}`;
+                }
             }
             throw new Error(errorMessage);
         }
@@ -99,7 +128,16 @@ export const forgotPassword = async (email: string): Promise<ForgotPasswordRespo
                 const errorBody = await response.json();
                 errorMessage = errorBody.mensaje || errorBody.message || `Error ${response.status}: ${response.statusText}`;
             } catch (jsonError) {
-                errorMessage = `Error ${response.status}: ${response.statusText}`;
+                switch (response.status) {
+                    case 404:
+                        errorMessage = 'No se encontró una cuenta con ese email.';
+                        break;
+                    case 500:
+                        errorMessage = 'Error interno del servidor. Inténtalo de nuevo más tarde.';
+                        break;
+                    default:
+                        errorMessage = `Error ${response.status}: ${response.statusText}`;
+                }
             }
             throw new Error(errorMessage);
         }
@@ -127,7 +165,7 @@ export const validateResetToken = async (token: string): Promise<ForgotPasswordR
                 const errorBody = await response.json();
                 errorMessage = errorBody.mensaje || errorBody.message || `Error ${response.status}: ${response.statusText}`;
             } catch (jsonError) {
-                errorMessage = `Error ${response.status}: ${response.statusText}`;
+                errorMessage = 'Token inválido o expirado.';
             }
             throw new Error(errorMessage);
         }
@@ -161,7 +199,7 @@ export const resetPassword = async (token: string, newPassword: string): Promise
                 const errorBody = await response.json();
                 errorMessage = errorBody.mensaje || errorBody.message || `Error ${response.status}: ${response.statusText}`;
             } catch (jsonError) {
-                errorMessage = `Error ${response.status}: ${response.statusText}`;
+                errorMessage = 'Error al cambiar la contraseña.';
             }
             throw new Error(errorMessage);
         }

@@ -18,7 +18,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/usuarios")
-@CrossOrigin(origins = "*")
 public class UserController {
 
     @Autowired
@@ -62,7 +61,7 @@ public class UserController {
             return ResponseEntity.badRequest()
                 .body(Map.of("error", e.getMessage()));
         } catch (Exception e) {
-            return ResponseEntity.badRequest()
+            return ResponseEntity.status(500)
                 .body(Map.of("error", "Error interno del servidor. Inténtalo de nuevo."));
         }
     }
@@ -76,6 +75,12 @@ public class UserController {
             
             Authentication authentication = authenticationManager.authenticate(authToken);
             User user = (User) authentication.getPrincipal();
+            
+            // Verificar si el usuario está activo
+            if (!user.isActive()) {
+                return ResponseEntity.status(403)
+                    .body(Map.of("error", "Tu cuenta está desactivada. Contacta al administrador."));
+            }
             
             // Generar token
             String jwtToken = tokenService.generateToken(user);
@@ -99,6 +104,8 @@ public class UserController {
             return ResponseEntity.status(401)
                 .body(Map.of("error", "Error de autenticación. Verifica tus credenciales."));
         } catch (Exception e) {
+            System.err.println("Error en login: " + e.getMessage());
+            e.printStackTrace();
             return ResponseEntity.status(500)
                 .body(Map.of("error", "Error interno del servidor. Inténtalo de nuevo."));
         }
