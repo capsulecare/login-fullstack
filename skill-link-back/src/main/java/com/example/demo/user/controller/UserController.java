@@ -47,7 +47,7 @@ public class UserController {
                 user.getSecondName(), 
                 user.getEmail(), 
                 user.getRole(),
-                user.getIntereses()
+                user.getInterests()  // <-- Ahora funciona con getInterests()
             );
             
             UserRegisterResponse response = new UserRegisterResponse(jwtToken, userResponse);
@@ -79,7 +79,7 @@ public class UserController {
                 user.getSecondName(),
                 user.getEmail(),
                 user.getRole(),
-                user.getIntereses()
+                user.getInterests()  // <-- Ahora funciona con getInterests()
             );
             
             return ResponseEntity.ok(response);

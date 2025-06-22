@@ -46,7 +46,7 @@ public class User implements UserDetails {
     @CollectionTable(name = "user_interests", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "interest_name", nullable = false)
     @Enumerated(EnumType.STRING)
-    private List<UserInterest> intereses;
+    private List<UserInterest> interests;  // <-- Cambié a inglés
 
     @Column(name = "fecha_registro")
     @CreationTimestamp
@@ -60,7 +60,7 @@ public class User implements UserDetails {
         this.email = userRegisterRequest.email();
         this.password = userRegisterRequest.password();
         this.role = userRegisterRequest.role();
-        this.intereses = userRegisterRequest.interests();
+        this.interests = userRegisterRequest.interests();  // <-- Cambié a inglés
         this.registrationDate = LocalDateTime.now();
     }
 
@@ -122,12 +122,12 @@ public class User implements UserDetails {
         this.active = active;
     }
 
-    public List<UserInterest> getIntereses() {
-        return intereses;
+    public List<UserInterest> getInterests() {  // <-- Método en inglés
+        return interests;
     }
 
-    public void setIntereses(List<UserInterest> intereses) {
-        this.intereses = intereses;
+    public void setInterests(List<UserInterest> interests) {  // <-- Método en inglés
+        this.interests = interests;
     }
 
     public LocalDateTime getRegistrationDate() {
