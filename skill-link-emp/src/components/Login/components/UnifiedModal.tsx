@@ -62,15 +62,15 @@ export const UnifiedModal: React.FC<UnifiedModalProps> = ({
 
   const interests = [
     { value: 'TECNOLOGIA' as UserInterest, label: 'Tecnología', icon: Code, color: 'from-blue-500 to-cyan-500' },
-    { value: 'NEGOCIOS_EMPRENDIMIENTO' as UserInterest, label: 'Negocios y Emprendimiento', icon: DollarSign, color: 'from-yellow-500 to-orange-500' },
-    { value: 'ARTE_CREATIVIDAD' as UserInterest, label: 'Arte y Creatividad', icon: Palette, color: 'from-violet-500 to-purple-500' },
-    { value: 'CIENCIA_EDUCACION' as UserInterest, label: 'Ciencia y Educación', icon: GraduationCap, color: 'from-indigo-500 to-purple-500' },
-    { value: 'IDIOMAS_CULTURA' as UserInterest, label: 'Idiomas y Cultura', icon: Globe, color: 'from-emerald-500 to-teal-500' },
-    { value: 'SALUD_BIENESTAR' as UserInterest, label: 'Salud y Bienestar', icon: Heart, color: 'from-pink-500 to-rose-500' },
+    { value: 'NEGOCIOS_EMPRENDIMIENTO' as UserInterest, label: 'Negocios', icon: DollarSign, color: 'from-yellow-500 to-orange-500' },
+    { value: 'ARTE_CREATIVIDAD' as UserInterest, label: 'Arte', icon: Palette, color: 'from-violet-500 to-purple-500' },
+    { value: 'CIENCIA_EDUCACION' as UserInterest, label: 'Ciencia', icon: GraduationCap, color: 'from-indigo-500 to-purple-500' },
+    { value: 'IDIOMAS_CULTURA' as UserInterest, label: 'Idiomas', icon: Globe, color: 'from-emerald-500 to-teal-500' },
+    { value: 'SALUD_BIENESTAR' as UserInterest, label: 'Salud', icon: Heart, color: 'from-pink-500 to-rose-500' },
     { value: 'DEPORTES' as UserInterest, label: 'Deportes', icon: Trophy, color: 'from-orange-500 to-red-500' },
-    { value: 'MEDIO_AMBIENTE' as UserInterest, label: 'Medio ambiente y Sostenibilidad', icon: Leaf, color: 'from-green-500 to-emerald-500' },
-    { value: 'DESARROLLO_PERSONAL' as UserInterest, label: 'Desarrollo Personal', icon: Brain, color: 'from-purple-600 to-indigo-600' },
-    { value: 'VIDEOJUEGOS_ENTRETENIMIENTO' as UserInterest, label: 'Video Juegos y Entretenimiento', icon: Gamepad2, color: 'from-purple-500 to-pink-500' }
+    { value: 'MEDIO_AMBIENTE' as UserInterest, label: 'Ambiente', icon: Leaf, color: 'from-green-500 to-emerald-500' },
+    { value: 'DESARROLLO_PERSONAL' as UserInterest, label: 'Desarrollo', icon: Brain, color: 'from-purple-600 to-indigo-600' },
+    { value: 'VIDEOJUEGOS_ENTRETENIMIENTO' as UserInterest, label: 'Gaming', icon: Gamepad2, color: 'from-purple-500 to-pink-500' }
   ];
 
   if (!isOpen) return null;
@@ -171,7 +171,7 @@ export const UnifiedModal: React.FC<UnifiedModalProps> = ({
               <p className="text-white/70 text-sm mb-3">
                 {selectedInterests.length} intereses seleccionados
               </p>
-              <div className="grid grid-cols-1 gap-2">
+              <div className="grid grid-cols-2 gap-2">
                 {interests.map((interest) => {
                   const Icon = interest.icon;
                   const isSelected = selectedInterests.includes(interest.value);
@@ -181,24 +181,24 @@ export const UnifiedModal: React.FC<UnifiedModalProps> = ({
                       key={interest.value}
                       type="button"
                       onClick={() => onInterestToggle(interest.value)}
-                      className={`relative p-3 cursor-pointer rounded-xl border transition-all duration-300 text-left group hover:scale-[1.02] ${
+                      className={`relative p-2.5 cursor-pointer rounded-xl border transition-all duration-300 text-center group hover:scale-[1.02] ${
                         isSelected
                           ? `border-transparent bg-gradient-to-r ${interest.color} shadow-lg`
                           : 'border-white/20 bg-white/5 hover:bg-white/10 hover:border-white/30'
                       }`}
                     >
-                      <div className="flex items-center space-x-3">
-                        <div className={`p-2 rounded-lg ${
+                      <div className="flex flex-col items-center space-y-1.5">
+                        <div className={`p-1.5 rounded-lg ${
                           isSelected 
                             ? 'bg-white/20' 
                             : 'bg-white/10 group-hover:bg-white/15'
                         }`}>
-                          <Icon className={`w-4 h-4 ${
+                          <Icon className={`w-3.5 h-3.5 ${
                             isSelected ? 'text-white' : 'text-white/70'
                           }`} />
                         </div>
                         
-                        <span className={`text-sm font-medium ${
+                        <span className={`text-xs font-medium leading-tight ${
                           isSelected ? 'text-white' : 'text-white/80'
                         }`}>
                           {interest.label}
