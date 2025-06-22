@@ -1,34 +1,32 @@
-package skill_link.emprendedor.controller;
+package com.example.demo.user.controller;
 
+import com.example.demo.user.dto.ForgotPasswordRequest;
+import com.example.demo.user.dto.PasswordResetResponse;
+import com.example.demo.user.dto.ResetPasswordRequest;
+import com.example.demo.user.service.PasswordResetService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import skill_link.emprendedor.dto.auth.ForgotPasswordRequest;
-import skill_link.emprendedor.dto.auth.PasswordResetResponse;
-import skill_link.emprendedor.dto.auth.ResetPasswordRequest;
-import skill_link.emprendedor.service.PasswordResetService;
 
-@Slf4j
 @RestController
-@RequestMapping("/api/auth")
-@RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:5173") // Ajusta según tu frontend
+@RequestMapping("/usuarios")
 public class PasswordResetController {
 
-    private final PasswordResetService passwordResetService;
+    @Autowired
+    private PasswordResetService passwordResetService;
 
     /**
      * Endpoint para solicitar recuperación de contraseña
-     * POST /api/auth/forgot-password
+     * POST /usuarios/recover-password
      */
-    @PostMapping("/forgot-password")
+    @PostMapping("/recover-password")
     public ResponseEntity<PasswordResetResponse> solicitarRecuperacion(
             @Valid @RequestBody ForgotPasswordRequest request) {
 
-        log.info("Solicitud de recuperación de contraseña recibida para: {}", request.getCorreo());
+        System.out.println("=== ENDPOINT RECOVER-PASSWORD ===");
+        System.out.println("Solicitud recibida para: " + request.getCorreo());
 
         PasswordResetResponse response = passwordResetService.solicitarRecuperacion(request);
 
@@ -38,13 +36,14 @@ public class PasswordResetController {
 
     /**
      * Endpoint para validar un token de recuperación
-     * GET /api/auth/validate-reset-token?token=xxx
+     * GET /usuarios/validate-reset-token?token=xxx
      */
     @GetMapping("/validate-reset-token")
     public ResponseEntity<PasswordResetResponse> validarToken(
             @RequestParam("token") String token) {
 
-        log.info("Validación de token solicitada");
+        System.out.println("=== ENDPOINT VALIDATE-RESET-TOKEN ===");
+        System.out.println("Validación solicitada para token: " + token);
 
         PasswordResetResponse response = passwordResetService.validarToken(token);
 
@@ -57,13 +56,14 @@ public class PasswordResetController {
 
     /**
      * Endpoint para cambiar contraseña con token
-     * POST /api/auth/reset-password
+     * POST /usuarios/reset-password
      */
     @PostMapping("/reset-password")
     public ResponseEntity<PasswordResetResponse> cambiarContrasena(
             @Valid @RequestBody ResetPasswordRequest request) {
 
-        log.info("Solicitud de cambio de contraseña recibida");
+        System.out.println("=== ENDPOINT RESET-PASSWORD ===");
+        System.out.println("Solicitud de cambio de contraseña recibida");
 
         PasswordResetResponse response = passwordResetService.cambiarContrasena(request);
 
@@ -76,19 +76,18 @@ public class PasswordResetController {
 
     /**
      * Endpoint de mantenimiento para limpiar tokens expirados
-     * DELETE /api/auth/cleanup-expired-tokens
-     * (Solo para administradores o tareas programadas)
+     * DELETE /usuarios/cleanup-expired-tokens
      */
     @DeleteMapping("/cleanup-expired-tokens")
     public ResponseEntity<String> limpiarTokensExpirados() {
 
-        log.info("Solicitud de limpieza de tokens expirados");
+        System.out.println("=== ENDPOINT CLEANUP-EXPIRED-TOKENS ===");
 
         try {
             passwordResetService.limpiarTokensExpirados();
             return ResponseEntity.ok("Tokens expirados eliminados exitosamente");
         } catch (Exception e) {
-            log.error("Error al limpiar tokens expirados", e);
+            System.err.println("Error al limpiar tokens expirados: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error al limpiar tokens expirados");
         }
