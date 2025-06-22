@@ -18,7 +18,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/usuarios")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UserController {
 
     @Autowired
@@ -33,19 +32,22 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegisterRequest userRegisterRequest){
         try{
+            System.out.println("=== REGISTRO DE USUARIO ===");
             System.out.println("Datos recibidos: " + userRegisterRequest);
             
             // Validar que no sea admin
             if(userRegisterRequest.role().name().equals("Admin")) {
                 return ResponseEntity.badRequest()
-                    .body(Map.of("error", "No se puede registrar un usuario con el rol ADMIN directamente."));
+                    .body(Map.of("error", "No se puede registrar un usuario con el rol ADMIN."));
             }
 
             // Registrar usuario
             User user = userService.register(userRegisterRequest);
+            System.out.println("Usuario creado con ID: " + user.getId());
             
             // Generar token automáticamente
             String jwtToken = tokenService.generateToken(user);
+            System.out.println("Token generado exitosamente");
             
             // Crear respuesta
             UserRegisterResponse.UserResponse userResponse = new UserRegisterResponse.UserResponse(
@@ -68,13 +70,16 @@ public class UserController {
             System.err.println("Error general: " + e.getMessage());
             e.printStackTrace();
             return ResponseEntity.status(500)
-                .body(Map.of("error", "Error interno del servidor. Inténtalo de nuevo."));
+                .body(Map.of("error", "Error interno del servidor."));
         }
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@Valid @RequestBody UserLoginRequest userLoginRequest){
         try{
+            System.out.println("=== LOGIN DE USUARIO ===");
+            System.out.println("Email: " + userLoginRequest.email());
+            
             // Autenticar usuario
             UsernamePasswordAuthenticationToken authToken = 
                 new UsernamePasswordAuthenticationToken(userLoginRequest.email(), userLoginRequest.password());
@@ -85,11 +90,12 @@ public class UserController {
             // Verificar si el usuario está activo
             if (!user.isActive()) {
                 return ResponseEntity.status(403)
-                    .body(Map.of("error", "Tu cuenta está desactivada. Contacta al administrador."));
+                    .body(Map.of("error", "Tu cuenta está desactivada."));
             }
             
             // Generar token
             String jwtToken = tokenService.generateToken(user);
+            System.out.println("Login exitoso para usuario: " + user.getEmail());
             
             // Crear respuesta
             UserLoginResponse response = new UserLoginResponse(
@@ -104,16 +110,18 @@ public class UserController {
             
             return ResponseEntity.ok(response);
         } catch (BadCredentialsException e) {
+            System.err.println("Credenciales incorrectas para: " + userLoginRequest.email());
             return ResponseEntity.status(401)
-                .body(Map.of("error", "Email o contraseña incorrectos. Verifica tus credenciales."));
+                .body(Map.of("error", "Email o contraseña incorrectos."));
         } catch (AuthenticationException e) {
+            System.err.println("Error de autenticación: " + e.getMessage());
             return ResponseEntity.status(401)
-                .body(Map.of("error", "Error de autenticación. Verifica tus credenciales."));
+                .body(Map.of("error", "Error de autenticación."));
         } catch (Exception e) {
             System.err.println("Error en login: " + e.getMessage());
             e.printStackTrace();
             return ResponseEntity.status(500)
-                .body(Map.of("error", "Error interno del servidor. Inténtalo de nuevo."));
+                .body(Map.of("error", "Error interno del servidor."));
         }
     }
 }
