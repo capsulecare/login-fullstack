@@ -43,10 +43,10 @@ public class User implements UserDetails {
     private boolean active = true;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_interests", joinColumns = @JoinColumn(name = "user_id"))
-    @Column(name = "interest_name", nullable = false)
+    @CollectionTable(name = "user_intereses", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "interes_name", nullable = false)
     @Enumerated(EnumType.STRING)
-    private List<UserInterest> interests;  // <-- Cambié a inglés
+    private List<UserInterest> interests;  // <-- Campo en inglés pero tabla en español
 
     @Column(name = "fecha_registro")
     @CreationTimestamp
@@ -60,7 +60,7 @@ public class User implements UserDetails {
         this.email = userRegisterRequest.email();
         this.password = userRegisterRequest.password();
         this.role = userRegisterRequest.role();
-        this.interests = userRegisterRequest.interests();  // <-- Cambié a inglés
+        this.interests = userRegisterRequest.interests();
         this.registrationDate = LocalDateTime.now();
     }
 
