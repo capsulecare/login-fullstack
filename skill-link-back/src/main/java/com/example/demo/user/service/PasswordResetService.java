@@ -52,18 +52,18 @@ public class PasswordResetService {
                 return PasswordResetResponse.exito(mensajeSeguro, request.correo());
             }
 
-            // 2. Limpiar tokens expirados ANTES de verificar
+            // 2. ✅ AHORA SÍ: Limpiar tokens expirados ANTES de verificar
             LocalDateTime now = LocalDateTime.now();
-            passwordResetTokenRepository.deleteExpiredTokens(now);
-            System.out.println("🧹 Tokens expirados eliminados");
+            int tokensExpiradosEliminados = passwordResetTokenRepository.deleteExpiredTokens(now);
+            System.out.println("🧹 Tokens expirados eliminados: " + tokensExpiradosEliminados);
 
-            // 3. Verificar si ya existe un token válido
+            // 3. ✅ AHORA SÍ: Verificar si ya existe un token válido DESPUÉS de limpiar
             if (passwordResetTokenRepository.existsValidTokenForUsuario(usuario, now)) {
                 System.out.println("⏰ Ya existe un token válido para: " + request.correo());
                 return PasswordResetResponse.exito(mensajeSeguro, request.correo());
             }
 
-            // 4. Eliminar TODOS los tokens anteriores del usuario
+            // 4. ✅ AHORA SÍ: Eliminar TODOS los tokens anteriores del usuario
             passwordResetTokenRepository.deleteByUsuario(usuario);
             System.out.println("🗑️ Tokens anteriores eliminados para: " + request.correo());
 
@@ -191,13 +191,14 @@ public class PasswordResetService {
 
     /**
      * Limpia tokens expirados (método de mantenimiento)
+     * ✅ SIMPLIFICADO: Solo para uso manual/programado
      */
     @Transactional
     public void limpiarTokensExpirados() {
         try {
-            System.out.println("🧹 Iniciando limpieza de tokens expirados");
+            System.out.println("🧹 Iniciando limpieza manual de tokens expirados");
             int tokensEliminados = passwordResetTokenRepository.deleteExpiredTokens(LocalDateTime.now());
-            System.out.println("✅ Limpieza completada - " + tokensEliminados + " tokens eliminados");
+            System.out.println("✅ Limpieza manual completada - " + tokensEliminados + " tokens eliminados");
         } catch (Exception e) {
             System.err.println("❌ Error al limpiar tokens expirados");
             e.printStackTrace();

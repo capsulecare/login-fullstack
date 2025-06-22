@@ -52,10 +52,6 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/usuarios/validate-reset-token")
                         .permitAll()
                         
-                        // Endpoint de limpieza (solo para admin/mantenimiento)
-                        .requestMatchers(HttpMethod.DELETE, "/usuarios/cleanup-expired-tokens")
-                        .permitAll() // Cambiar a .hasRole("ADMIN") cuando tengas autenticación de admin
-                        
                         // Todo lo demás requiere autenticación
                         .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

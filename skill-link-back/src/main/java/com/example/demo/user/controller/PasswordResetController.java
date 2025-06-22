@@ -74,22 +74,6 @@ public class PasswordResetController {
         }
     }
 
-    /**
-     * Endpoint de mantenimiento para limpiar tokens expirados
-     * DELETE /usuarios/cleanup-expired-tokens
-     */
-    @DeleteMapping("/cleanup-expired-tokens")
-    public ResponseEntity<String> limpiarTokensExpirados() {
-
-        System.out.println("=== ENDPOINT CLEANUP-EXPIRED-TOKENS ===");
-
-        try {
-            passwordResetService.limpiarTokensExpirados();
-            return ResponseEntity.ok("Tokens expirados eliminados exitosamente");
-        } catch (Exception e) {
-            System.err.println("Error al limpiar tokens expirados: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error al limpiar tokens expirados");
-        }
-    }
+    // ✅ REMOVIDO: El endpoint cleanup-expired-tokens ya no es necesario
+    // porque la limpieza es automática en cada solicitud
 }
