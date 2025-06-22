@@ -61,16 +61,16 @@ export const UnifiedModal: React.FC<UnifiedModalProps> = ({
   ];
 
   const interests = [
-    { value: 'TECNOLOGIA' as UserInterest, label: 'Tecnología', icon: Code, color: 'from-blue-500 to-cyan-500' },
-    { value: 'NEGOCIOS_EMPRENDIMIENTO' as UserInterest, label: 'Negocios', icon: DollarSign, color: 'from-yellow-500 to-orange-500' },
-    { value: 'ARTE_CREATIVIDAD' as UserInterest, label: 'Arte', icon: Palette, color: 'from-violet-500 to-purple-500' },
-    { value: 'CIENCIA_EDUCACION' as UserInterest, label: 'Ciencia', icon: GraduationCap, color: 'from-indigo-500 to-purple-500' },
-    { value: 'IDIOMAS_CULTURA' as UserInterest, label: 'Idiomas', icon: Globe, color: 'from-emerald-500 to-teal-500' },
-    { value: 'SALUD_BIENESTAR' as UserInterest, label: 'Salud', icon: Heart, color: 'from-pink-500 to-rose-500' },
-    { value: 'DEPORTES' as UserInterest, label: 'Deportes', icon: Trophy, color: 'from-orange-500 to-red-500' },
-    { value: 'MEDIO_AMBIENTE' as UserInterest, label: 'Ambiente', icon: Leaf, color: 'from-green-500 to-emerald-500' },
-    { value: 'DESARROLLO_PERSONAL' as UserInterest, label: 'Desarrollo', icon: Brain, color: 'from-purple-600 to-indigo-600' },
-    { value: 'VIDEOJUEGOS_ENTRETENIMIENTO' as UserInterest, label: 'Gaming', icon: Gamepad2, color: 'from-purple-500 to-pink-500' }
+    { value: 'Tecnología' as UserInterest, label: 'Tecnología', icon: Code, color: 'from-blue-500 to-cyan-500' },
+    { value: 'Negocios y Emprendimiento' as UserInterest, label: 'Negocios', icon: DollarSign, color: 'from-yellow-500 to-orange-500' },
+    { value: 'Arte y Creatividad' as UserInterest, label: 'Arte', icon: Palette, color: 'from-violet-500 to-purple-500' },
+    { value: 'Ciencia y Educación' as UserInterest, label: 'Ciencia', icon: GraduationCap, color: 'from-indigo-500 to-purple-500' },
+    { value: 'Idiomas y Cultura' as UserInterest, label: 'Idiomas', icon: Globe, color: 'from-emerald-500 to-teal-500' },
+    { value: 'Salud y Bienestar' as UserInterest, label: 'Salud', icon: Heart, color: 'from-pink-500 to-rose-500' },
+    { value: 'Deportes' as UserInterest, label: 'Deportes', icon: Trophy, color: 'from-orange-500 to-red-500' },
+    { value: 'Medio ambiente y Sostenibilidad' as UserInterest, label: 'Ambiente', icon: Leaf, color: 'from-green-500 to-emerald-500' },
+    { value: 'Desarrollo Personal' as UserInterest, label: 'Desarrollo', icon: Brain, color: 'from-purple-600 to-indigo-600' },
+    { value: 'Video Juegos y Entretenimiento' as UserInterest, label: 'Gaming', icon: Gamepad2, color: 'from-purple-500 to-pink-500' }
   ];
 
   if (!isOpen) return null;

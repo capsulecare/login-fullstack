@@ -3,16 +3,16 @@ export type AuthMode = 'login' | 'register' | 'forgot';
 export type UserRole = 'Mentor' | 'Colaborador';
 
 export type UserInterest = 
-  | 'TECNOLOGIA'
-  | 'NEGOCIOS_EMPRENDIMIENTO'
-  | 'ARTE_CREATIVIDAD'
-  | 'CIENCIA_EDUCACION'
-  | 'IDIOMAS_CULTURA'
-  | 'SALUD_BIENESTAR'
-  | 'DEPORTES'
-  | 'MEDIO_AMBIENTE'
-  | 'DESARROLLO_PERSONAL'
-  | 'VIDEOJUEGOS_ENTRETENIMIENTO';
+  | 'Tecnología'
+  | 'Negocios y Emprendimiento'
+  | 'Arte y Creatividad'
+  | 'Ciencia y Educación'
+  | 'Idiomas y Cultura'
+  | 'Salud y Bienestar'
+  | 'Deportes'
+  | 'Medio ambiente y Sostenibilidad'
+  | 'Desarrollo Personal'
+  | 'Video Juegos y Entretenimiento';
 
 export interface FormData {
   firstName: string;

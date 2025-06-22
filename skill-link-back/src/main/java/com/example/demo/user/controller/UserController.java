@@ -18,6 +18,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/usuarios")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UserController {
 
     @Autowired
@@ -32,6 +33,8 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegisterRequest userRegisterRequest){
         try{
+            System.out.println("Datos recibidos: " + userRegisterRequest);
+            
             // Validar que no sea admin
             if(userRegisterRequest.role().name().equals("Admin")) {
                 return ResponseEntity.badRequest()
@@ -58,9 +61,12 @@ public class UserController {
             
             return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
+            System.err.println("Error de runtime: " + e.getMessage());
             return ResponseEntity.badRequest()
                 .body(Map.of("error", e.getMessage()));
         } catch (Exception e) {
+            System.err.println("Error general: " + e.getMessage());
+            e.printStackTrace();
             return ResponseEntity.status(500)
                 .body(Map.of("error", "Error interno del servidor. Inténtalo de nuevo."));
         }
