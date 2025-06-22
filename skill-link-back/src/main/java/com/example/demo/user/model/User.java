@@ -43,10 +43,10 @@ public class User implements UserDetails {
     private boolean active = true;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_intereses", joinColumns = @JoinColumn(name = "user_id"))
-    @Column(name = "interes_name", nullable = false)
+    @CollectionTable(name = "usuario_intereses", joinColumns = @JoinColumn(name = "usuario_id"))
+    @Column(name = "interes", nullable = false)
     @Enumerated(EnumType.STRING)
-    private List<UserInterest> interests;  // <-- Campo en inglés pero tabla en español
+    private List<UserInterest> interests;
 
     @Column(name = "fecha_registro")
     @CreationTimestamp
@@ -122,11 +122,11 @@ public class User implements UserDetails {
         this.active = active;
     }
 
-    public List<UserInterest> getInterests() {  // <-- Método en inglés
+    public List<UserInterest> getInterests() {
         return interests;
     }
 
-    public void setInterests(List<UserInterest> interests) {  // <-- Método en inglés
+    public void setInterests(List<UserInterest> interests) {
         this.interests = interests;
     }
 
