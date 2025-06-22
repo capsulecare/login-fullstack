@@ -40,21 +40,21 @@ public class PasswordResetService {
     public PasswordResetResponse solicitarRecuperacion(ForgotPasswordRequest request) {
         try {
             System.out.println("=== SOLICITUD DE RECUPERACIÓN ===");
-            System.out.println("Email: " + request.getCorreo());
+            System.out.println("Email: " + request.correo());
 
             // 1. Verificar si el usuario existe
-            Optional<User> usuarioOpt = userRepository.findUserByEmail(request.getCorreo());
+            Optional<User> usuarioOpt = userRepository.findUserByEmail(request.correo());
 
             // Por seguridad, siempre devolvemos el mismo mensaje (no revelamos si el email existe)
             String mensajeSeguro = "Si el correo electrónico está registrado, recibirás un enlace de recuperación en breve.";
 
             if (usuarioOpt.isEmpty()) {
-                System.out.println("✗ Usuario NO encontrado: " + request.getCorreo());
-                return PasswordResetResponse.exito(mensajeSeguro, request.getCorreo());
+                System.out.println("✗ Usuario NO encontrado: " + request.correo());
+                return PasswordResetResponse.exito(mensajeSeguro, request.correo());
             }
 
             User usuario = usuarioOpt.get();
-            System.out.println("✓ Usuario encontrado: " + request.getCorreo());
+            System.out.println("✓ Usuario encontrado: " + request.correo());
 
             // 2. Limpiar tokens expirados ANTES de verificar si existe uno válido
             LocalDateTime now = LocalDateTime.now();
@@ -63,13 +63,13 @@ public class PasswordResetService {
 
             // 3. Verificar si ya existe un token válido DESPUÉS de limpiar expirados
             if (passwordResetTokenRepository.existsValidTokenForUsuario(usuario, now)) {
-                System.out.println("⚠ Ya existe un token válido para el usuario: " + request.getCorreo());
-                return PasswordResetResponse.exito(mensajeSeguro, request.getCorreo());
+                System.out.println("⚠ Ya existe un token válido para el usuario: " + request.correo());
+                return PasswordResetResponse.exito(mensajeSeguro, request.correo());
             }
 
             // 4. Eliminar TODOS los tokens anteriores del usuario (válidos y expirados)
             passwordResetTokenRepository.deleteByUsuario(usuario);
-            System.out.println("✓ Tokens anteriores eliminados para el usuario: " + request.getCorreo());
+            System.out.println("✓ Tokens anteriores eliminados para el usuario: " + request.correo());
 
             // 5. Crear nuevo token
             String tokenValue = UUID.randomUUID().toString();
@@ -79,14 +79,14 @@ public class PasswordResetService {
             passwordResetTokenRepository.save(token);
 
             // 6. Logs para desarrollo (aquí iría el envío de email)
-            System.out.println("✓ Token de recuperación generado para " + request.getCorreo() + ": " + tokenValue);
+            System.out.println("✓ Token de recuperación generado para " + request.correo() + ": " + tokenValue);
             System.out.println("📧 Enlace de recuperación: http://localhost:5173/reset-password?token=" + tokenValue);
             System.out.println("⏰ Token expira el: " + expiry);
 
-            return PasswordResetResponse.exito(mensajeSeguro, request.getCorreo());
+            return PasswordResetResponse.exito(mensajeSeguro, request.correo());
 
         } catch (Exception e) {
-            System.err.println("Error al procesar solicitud de recuperación para: " + request.getCorreo());
+            System.err.println("Error al procesar solicitud de recuperación para: " + request.correo());
             e.printStackTrace();
             return PasswordResetResponse.error("Estamos en mantenimiento. Intenta más tarde.");
         }
@@ -144,13 +144,13 @@ public class PasswordResetService {
     public PasswordResetResponse cambiarContrasena(ResetPasswordRequest request) {
         try {
             System.out.println("=== CAMBIO DE CONTRASEÑA ===");
-            System.out.println("Token: " + request.getToken());
+            System.out.println("Token: " + request.token());
 
             // 1. Buscar y validar token
-            Optional<PasswordResetToken> resetTokenOpt = passwordResetTokenRepository.findByToken(request.getToken());
+            Optional<PasswordResetToken> resetTokenOpt = passwordResetTokenRepository.findByToken(request.token());
 
             if (resetTokenOpt.isEmpty()) {
-                System.out.println("✗ Token no encontrado para cambio de contraseña: " + request.getToken());
+                System.out.println("✗ Token no encontrado para cambio de contraseña: " + request.token());
                 return PasswordResetResponse.error("Enlace inválido o expirado.");
             }
 
@@ -159,21 +159,21 @@ public class PasswordResetService {
             // Validación más específica
             if (!resetToken.isValido()) {
                 if (resetToken.isUsado()) {
-                    System.out.println("✗ Intento de usar token ya utilizado: " + request.getToken());
+                    System.out.println("✗ Intento de usar token ya utilizado: " + request.token());
                     return PasswordResetResponse.error("Este enlace ya fue utilizado.");
                 } else if (resetToken.isExpirado()) {
-                    System.out.println("✗ Intento de usar token expirado: " + request.getToken() + 
+                    System.out.println("✗ Intento de usar token expirado: " + request.token() + 
                                      " - Expiró: " + resetToken.getFechaExpiracion());
                     return PasswordResetResponse.error("Este enlace ha expirado. Solicita uno nuevo.");
                 } else {
-                    System.out.println("✗ Token inválido para cambio de contraseña: " + request.getToken());
+                    System.out.println("✗ Token inválido para cambio de contraseña: " + request.token());
                     return PasswordResetResponse.error("Enlace inválido.");
                 }
             }
 
             // 2. Obtener usuario y cambiar contraseña
             User usuario = resetToken.getUsuario();
-            String nuevaContraEncriptada = passwordEncoder.encode(request.getNuevaContra());
+            String nuevaContraEncriptada = passwordEncoder.encode(request.nuevaContra());
             usuario.setPassword(nuevaContraEncriptada);
 
             userRepository.save(usuario);
@@ -190,7 +190,7 @@ public class PasswordResetService {
             );
 
         } catch (Exception e) {
-            System.err.println("Error al cambiar contraseña con token: " + request.getToken());
+            System.err.println("Error al cambiar contraseña con token: " + request.token());
             e.printStackTrace();
             return PasswordResetResponse.error("Estamos en mantenimiento. Intenta más tarde.");
         }

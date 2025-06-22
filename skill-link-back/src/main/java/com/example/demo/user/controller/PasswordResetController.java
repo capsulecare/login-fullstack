@@ -26,7 +26,7 @@ public class PasswordResetController {
             @Valid @RequestBody ForgotPasswordRequest request) {
 
         System.out.println("=== ENDPOINT RECOVER-PASSWORD ===");
-        System.out.println("Solicitud recibida para: " + request.getCorreo());
+        System.out.println("Solicitud recibida para: " + request.correo());
 
         PasswordResetResponse response = passwordResetService.solicitarRecuperacion(request);
 
@@ -47,7 +47,7 @@ public class PasswordResetController {
 
         PasswordResetResponse response = passwordResetService.validarToken(token);
 
-        if (response.isExito()) {
+        if (response.exito()) {
             return ResponseEntity.ok(response);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
@@ -67,7 +67,7 @@ public class PasswordResetController {
 
         PasswordResetResponse response = passwordResetService.cambiarContrasena(request);
 
-        if (response.isExito()) {
+        if (response.exito()) {
             return ResponseEntity.ok(response);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
