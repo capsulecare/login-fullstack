@@ -13,7 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.UUID;
 
 @Service
@@ -56,7 +57,7 @@ public class PasswordResetService {
             }
 
             // 2. Limpiar tokens expirados ANTES de verificar
-            LocalDateTime now = LocalDateTime.now();
+            OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
             int tokensExpiradosEliminados = passwordResetTokenRepository.deleteExpiredTokens(now);
             System.out.println("🧹 Tokens expirados eliminados: " + tokensExpiradosEliminados);
 
@@ -72,7 +73,7 @@ public class PasswordResetService {
 
             // 5. Crear nuevo token
             String tokenValue = UUID.randomUUID().toString();
-            LocalDateTime expiry = now.plusMinutes(expirationMinutes);
+            OffsetDateTime expiry = now.plusMinutes(expirationMinutes);
 
             PasswordResetToken token = new PasswordResetToken(tokenValue, usuario, now, expiry);
             passwordResetTokenRepository.save(token);
@@ -90,7 +91,7 @@ public class PasswordResetService {
 
             // 7. Log del token generado (solo para desarrollo)
             System.out.println("✅ Token de recuperación generado para " + request.correo() + ": " + tokenValue);
-            System.out.println("⏰ Token expira el: " + expiry);
+            System.out.println("⏰ Token expira el: " + expiry + " UTC");
             System.out.println("🚀 Respuesta enviada inmediatamente, correo procesándose en segundo plano");
 
             return PasswordResetResponse.exito(mensajeSeguro, request.correo());
@@ -118,10 +119,11 @@ public class PasswordResetService {
             }
 
             // Log detallado para debugging
+            OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
             System.out.println("📋 Token encontrado:");
             System.out.println("   - Usado: " + resetToken.isUsado());
-            System.out.println("   - Expira: " + resetToken.getFechaExpiracion());
-            System.out.println("   - Ahora: " + LocalDateTime.now());
+            System.out.println("   - Expira: " + resetToken.getFechaExpiracion() + " UTC");
+            System.out.println("   - Ahora: " + now + " UTC");
             System.out.println("   - Es válido: " + resetToken.isValido());
 
             if (!resetToken.isValido()) {
@@ -129,7 +131,7 @@ public class PasswordResetService {
                     System.out.println("⚠️ Token ya fue usado: " + token);
                     return PasswordResetResponse.error("Este enlace ya fue utilizado.");
                 } else if (resetToken.isExpirado()) {
-                    System.out.println("⏰ Token expirado: " + token + " - Expiró: " + resetToken.getFechaExpiracion());
+                    System.out.println("⏰ Token expirado: " + token + " - Expiró: " + resetToken.getFechaExpiracion() + " UTC");
                     return PasswordResetResponse.error("Este enlace ha expirado. Solicita uno nuevo.");
                 } else {
                     System.out.println("❓ Token inválido por razón desconocida: " + token);
@@ -170,7 +172,7 @@ public class PasswordResetService {
                     System.out.println("⚠️ Intento de usar token ya utilizado: " + request.token());
                     return PasswordResetResponse.error("Este enlace ya fue utilizado.");
                 } else if (resetToken.isExpirado()) {
-                    System.out.println("⏰ Intento de usar token expirado: " + request.token() + " - Expiró: " + resetToken.getFechaExpiracion());
+                    System.out.println("⏰ Intento de usar token expirado: " + request.token() + " - Expiró: " + resetToken.getFechaExpiracion() + " UTC");
                     return PasswordResetResponse.error("Este enlace ha expirado. Solicita uno nuevo.");
                 } else {
                     System.out.println("❓ Token inválido para cambio de contraseña: " + request.token());
@@ -210,7 +212,8 @@ public class PasswordResetService {
     public void limpiarTokensExpirados() {
         try {
             System.out.println("🧹 Iniciando limpieza manual de tokens expirados");
-            int tokensEliminados = passwordResetTokenRepository.deleteExpiredTokens(LocalDateTime.now());
+            OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
+            int tokensEliminados = passwordResetTokenRepository.deleteExpiredTokens(now);
             System.out.println("✅ Limpieza manual completada - " + tokensEliminados + " tokens eliminados");
         } catch (Exception e) {
             System.err.println("❌ Error al limpiar tokens expirados");
