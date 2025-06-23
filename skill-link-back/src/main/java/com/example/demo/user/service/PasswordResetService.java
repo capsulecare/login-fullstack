@@ -28,6 +28,9 @@ public class PasswordResetService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private EmailService emailService;
+
     // Configuración del tiempo de expiración (en minutos)
     @Value("${app.password-reset.expiration-minutes:15}")
     private int expirationMinutes;
@@ -52,18 +55,18 @@ public class PasswordResetService {
                 return PasswordResetResponse.exito(mensajeSeguro, request.correo());
             }
 
-            // 2. ✅ AHORA SÍ: Limpiar tokens expirados ANTES de verificar
+            // 2. Limpiar tokens expirados ANTES de verificar
             LocalDateTime now = LocalDateTime.now();
             int tokensExpiradosEliminados = passwordResetTokenRepository.deleteExpiredTokens(now);
             System.out.println("🧹 Tokens expirados eliminados: " + tokensExpiradosEliminados);
 
-            // 3. ✅ AHORA SÍ: Verificar si ya existe un token válido DESPUÉS de limpiar
+            // 3. Verificar si ya existe un token válido DESPUÉS de limpiar
             if (passwordResetTokenRepository.existsValidTokenForUsuario(usuario, now)) {
                 System.out.println("⏰ Ya existe un token válido para: " + request.correo());
                 return PasswordResetResponse.exito(mensajeSeguro, request.correo());
             }
 
-            // 4. ✅ AHORA SÍ: Eliminar TODOS los tokens anteriores del usuario
+            // 4. Eliminar TODOS los tokens anteriores del usuario
             passwordResetTokenRepository.deleteByUsuario(usuario);
             System.out.println("🗑️ Tokens anteriores eliminados para: " + request.correo());
 
@@ -74,9 +77,18 @@ public class PasswordResetService {
             PasswordResetToken token = new PasswordResetToken(tokenValue, usuario, now, expiry);
             passwordResetTokenRepository.save(token);
 
-            // 6. Log del token generado
+            // 6. Enviar correo de recuperación
+            try {
+                String nombreUsuario = usuario.getName() + " " + usuario.getSecondName();
+                emailService.enviarCorreoRecuperacion(request.correo(), nombreUsuario, tokenValue);
+                System.out.println("✅ Correo de recuperación enviado exitosamente a: " + request.correo());
+            } catch (Exception emailError) {
+                System.err.println("❌ Error al enviar correo, pero token creado: " + emailError.getMessage());
+                // Continuamos aunque falle el envío del correo
+            }
+
+            // 7. Log del token generado (solo para desarrollo)
             System.out.println("✅ Token de recuperación generado para " + request.correo() + ": " + tokenValue);
-            System.out.println("📧 Enlace de recuperación: http://localhost:5173/reset-password?token=" + tokenValue);
             System.out.println("⏰ Token expira el: " + expiry);
 
             return PasswordResetResponse.exito(mensajeSeguro, request.correo());
@@ -191,7 +203,6 @@ public class PasswordResetService {
 
     /**
      * Limpia tokens expirados (método de mantenimiento)
-     * ✅ SIMPLIFICADO: Solo para uso manual/programado
      */
     @Transactional
     public void limpiarTokensExpirados() {

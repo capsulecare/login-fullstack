@@ -73,7 +73,4 @@ public class PasswordResetController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
-
-    // ✅ REMOVIDO: El endpoint cleanup-expired-tokens ya no es necesario
-    // porque la limpieza es automática en cada solicitud
 }
