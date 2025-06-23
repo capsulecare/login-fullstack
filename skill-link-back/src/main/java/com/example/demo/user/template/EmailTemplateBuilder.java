@@ -48,33 +48,30 @@ public class EmailTemplateBuilder {
                     "}" +
                     
                     ".logo {" +
-                        "display: inline-flex;" +
+                        "display: flex;" +
+                        "flex-direction: column;" +
                         "align-items: center;" +
-                        "gap: 12px;" +
+                        "gap: 8px;" +
                         "margin-bottom: 15px;" +
                     "}" +
                     
                     ".logo-icon {" +
-                        "width: 40px;" +
-                        "height: 40px;" +
-                        "background: rgba(255, 255, 255, 0.2);" +
-                        "border-radius: 8px;" +
-                        "display: flex;" +
-                        "align-items: center;" +
-                        "justify-content: center;" +
-                        "font-size: 20px;" +
+                        "font-size: 32px;" +
+                        "line-height: 1;" +
                     "}" +
                     
                     ".logo-text {" +
                         "color: white;" +
                         "font-size: 28px;" +
                         "font-weight: 700;" +
+                        "margin: 0;" +
                     "}" +
                     
                     ".header-subtitle {" +
                         "color: rgba(255, 255, 255, 0.9);" +
                         "font-size: 14px;" +
                         "font-weight: 500;" +
+                        "margin: 0;" +
                     "}" +
                     
                     ".content {" +
@@ -110,7 +107,7 @@ public class EmailTemplateBuilder {
                         "text-decoration: none;" +
                         "padding: 14px 28px;" +
                         "border-radius: 8px;" +
-                        "font-weight: 600;" +
+                        "font-weight: 700;" +
                         "font-size: 16px;" +
                         "transition: background-color 0.3s ease;" +
                     "}" +
@@ -139,12 +136,6 @@ public class EmailTemplateBuilder {
                         "font-size: 14px;" +
                         "line-height: 1.6;" +
                         "text-align: justify;" +
-                    "}" +
-                    
-                    ".divider {" +
-                        "height: 1px;" +
-                        "background-color: #e5e7eb;" +
-                        "margin: 25px 0;" +
                     "}" +
                     
                     "@media (max-width: 600px) {" +
@@ -177,9 +168,9 @@ public class EmailTemplateBuilder {
                     "<div class=\"header\">" +
                         "<div class=\"logo\">" +
                             "<div class=\"logo-icon\">💡</div>" +
-                            "<div class=\"logo-text\">SkillLink</div>" +
+                            "<h1 class=\"logo-text\">SkillLink</h1>" +
                         "</div>" +
-                        "<div class=\"header-subtitle\">Plataforma Emprendedora</div>" +
+                        "<p class=\"header-subtitle\">Plataforma Emprendedora</p>" +
                     "</div>" +
                     
                     "<div class=\"content\">" +
@@ -193,7 +184,7 @@ public class EmailTemplateBuilder {
                         
                         "<div class=\"cta-container\">" +
                             "<a href=\"" + enlaceRecuperacion + "\" class=\"cta-button\">" +
-                                "🔐 Restablecer mi contraseña" +
+                                "Restablecer contraseña" +
                             "</a>" +
                         "</div>" +
                         
@@ -205,12 +196,6 @@ public class EmailTemplateBuilder {
                                 "Tu cuenta permanecerá protegida y no se realizarán cambios. " +
                                 "Por tu seguridad, nunca compartas este enlace con otras personas." +
                             "</div>" +
-                        "</div>" +
-                        
-                        "<div class=\"divider\"></div>" +
-                        
-                        "<div class=\"message\" style=\"font-size: 14px; color: #6b7280; text-align: center;\">" +
-                            "Si tienes problemas para acceder al enlace, contacta a nuestro equipo de soporte." +
                         "</div>" +
                     "</div>" +
                 "</div>" +
