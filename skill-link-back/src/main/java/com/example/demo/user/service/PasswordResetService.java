@@ -77,19 +77,21 @@ public class PasswordResetService {
             PasswordResetToken token = new PasswordResetToken(tokenValue, usuario, now, expiry);
             passwordResetTokenRepository.save(token);
 
-            // 6. Enviar correo de recuperación
-            try {
-                String nombreUsuario = usuario.getName() + " " + usuario.getSecondName();
-                emailService.enviarCorreoRecuperacion(request.correo(), nombreUsuario, tokenValue);
-                System.out.println("✅ Correo de recuperación enviado exitosamente a: " + request.correo());
-            } catch (Exception emailError) {
-                System.err.println("❌ Error al enviar correo, pero token creado: " + emailError.getMessage());
-                // Continuamos aunque falle el envío del correo
-            }
+            // 6. Enviar correo de recuperación de forma ASÍNCRONA
+            String nombreUsuario = usuario.getName() + " " + usuario.getSecondName();
+            emailService.enviarCorreoRecuperacion(request.correo(), nombreUsuario, tokenValue)
+                .whenComplete((result, throwable) -> {
+                    if (throwable != null) {
+                        System.err.println("❌ [ASYNC] Error al enviar correo: " + throwable.getMessage());
+                    } else {
+                        System.out.println("✅ [ASYNC] Correo procesado correctamente");
+                    }
+                });
 
             // 7. Log del token generado (solo para desarrollo)
             System.out.println("✅ Token de recuperación generado para " + request.correo() + ": " + tokenValue);
             System.out.println("⏰ Token expira el: " + expiry);
+            System.out.println("🚀 Respuesta enviada inmediatamente, correo procesándose en segundo plano");
 
             return PasswordResetResponse.exito(mensajeSeguro, request.correo());
 
