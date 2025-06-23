@@ -45,19 +45,27 @@ public class EmailTemplateBuilder {
                         "background-color: #7c3aed;" +
                         "padding: 30px;" +
                         "text-align: center;" +
+                        "display: flex;" +
+                        "flex-direction: column;" +
+                        "align-items: center;" +
+                        "justify-content: center;" +
                     "}" +
                     
                     ".logo {" +
                         "display: flex;" +
                         "flex-direction: column;" +
                         "align-items: center;" +
+                        "justify-content: center;" +
                         "gap: 8px;" +
                         "margin-bottom: 15px;" +
+                        "width: 100%;" +
                     "}" +
                     
                     ".logo-icon {" +
                         "font-size: 32px;" +
                         "line-height: 1;" +
+                        "display: block;" +
+                        "text-align: center;" +
                     "}" +
                     
                     ".logo-text {" +
@@ -65,6 +73,9 @@ public class EmailTemplateBuilder {
                         "font-size: 28px;" +
                         "font-weight: 700;" +
                         "margin: 0;" +
+                        "text-align: center;" +
+                        "display: block;" +
+                        "width: 100%;" +
                     "}" +
                     
                     ".header-subtitle {" +
@@ -72,6 +83,9 @@ public class EmailTemplateBuilder {
                         "font-size: 14px;" +
                         "font-weight: 500;" +
                         "margin: 0;" +
+                        "text-align: center;" +
+                        "display: block;" +
+                        "width: 100%;" +
                     "}" +
                     
                     ".content {" +
