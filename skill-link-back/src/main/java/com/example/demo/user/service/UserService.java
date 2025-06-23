@@ -19,9 +19,6 @@ public class UserService implements UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private EmailService emailService;
-
     public User register(UserRegisterRequest userRegisterRequest) {
         // Verificar si el email ya existe
         if(userRepository.existsByEmail(userRegisterRequest.email())) {
@@ -33,18 +30,7 @@ public class UserService implements UserDetailsService {
         User user = new User(userRegisterRequest);
         user.setPassword(hashedPassword);
         
-        User savedUser = userRepository.save(user);
-
-        // Enviar correo de bienvenida (no bloqueante)
-        try {
-            String nombreCompleto = savedUser.getName() + " " + savedUser.getSecondName();
-            emailService.enviarCorreoBienvenida(savedUser.getEmail(), nombreCompleto);
-        } catch (Exception e) {
-            System.err.println("⚠️ Error al enviar correo de bienvenida (no crítico): " + e.getMessage());
-            // No afectamos el registro del usuario
-        }
-
-        return savedUser;
+        return userRepository.save(user);
     }
 
     public boolean existsByEmail(String email) {
