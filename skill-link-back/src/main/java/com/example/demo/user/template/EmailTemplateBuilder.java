@@ -27,80 +27,54 @@ public class EmailTemplateBuilder {
                         "font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;" +
                         "line-height: 1.6;" +
                         "color: #333;" +
-                        "background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);" +
-                        "min-height: 100vh;" +
+                        "background-color: #f3f4f6;" +
                         "padding: 20px;" +
                     "}" +
                     
                     ".container {" +
                         "max-width: 600px;" +
                         "margin: 0 auto;" +
-                        "background: rgba(255, 255, 255, 0.95);" +
-                        "backdrop-filter: blur(10px);" +
-                        "border-radius: 20px;" +
-                        "box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);" +
+                        "background: white;" +
+                        "border-radius: 12px;" +
+                        "box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);" +
                         "overflow: hidden;" +
-                        "border: 1px solid rgba(255, 255, 255, 0.2);" +
+                        "border: 1px solid #e5e7eb;" +
                     "}" +
                     
                     ".header {" +
-                        "background: linear-gradient(135deg, #10b981 0%, #059669 50%, #7c3aed 100%);" +
-                        "padding: 40px 30px;" +
+                        "background-color: #7c3aed;" +
+                        "padding: 30px;" +
                         "text-align: center;" +
-                        "position: relative;" +
-                        "overflow: hidden;" +
-                    "}" +
-                    
-                    ".header::before {" +
-                        "content: '';" +
-                        "position: absolute;" +
-                        "top: -50%;" +
-                        "left: -50%;" +
-                        "width: 200%;" +
-                        "height: 200%;" +
-                        "background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);" +
-                        "animation: float 6s ease-in-out infinite;" +
-                    "}" +
-                    
-                    "@keyframes float {" +
-                        "0%, 100% { transform: translateY(0px) rotate(0deg); }" +
-                        "50% { transform: translateY(-20px) rotate(180deg); }" +
                     "}" +
                     
                     ".logo {" +
                         "display: inline-flex;" +
                         "align-items: center;" +
                         "gap: 12px;" +
-                        "margin-bottom: 20px;" +
-                        "position: relative;" +
-                        "z-index: 2;" +
+                        "margin-bottom: 15px;" +
                     "}" +
                     
                     ".logo-icon {" +
-                        "width: 50px;" +
-                        "height: 50px;" +
+                        "width: 40px;" +
+                        "height: 40px;" +
                         "background: rgba(255, 255, 255, 0.2);" +
-                        "border-radius: 12px;" +
+                        "border-radius: 8px;" +
                         "display: flex;" +
                         "align-items: center;" +
                         "justify-content: center;" +
-                        "backdrop-filter: blur(10px);" +
-                        "border: 1px solid rgba(255, 255, 255, 0.3);" +
+                        "font-size: 20px;" +
                     "}" +
                     
                     ".logo-text {" +
                         "color: white;" +
-                        "font-size: 32px;" +
+                        "font-size: 28px;" +
                         "font-weight: 700;" +
-                        "text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);" +
                     "}" +
                     
                     ".header-subtitle {" +
                         "color: rgba(255, 255, 255, 0.9);" +
-                        "font-size: 16px;" +
+                        "font-size: 14px;" +
                         "font-weight: 500;" +
-                        "position: relative;" +
-                        "z-index: 2;" +
                     "}" +
                     
                     ".content {" +
@@ -109,7 +83,7 @@ public class EmailTemplateBuilder {
                     "}" +
                     
                     ".greeting {" +
-                        "font-size: 24px;" +
+                        "font-size: 22px;" +
                         "font-weight: 600;" +
                         "color: #1f2937;" +
                         "margin-bottom: 20px;" +
@@ -118,156 +92,82 @@ public class EmailTemplateBuilder {
                     
                     ".message {" +
                         "font-size: 16px;" +
-                        "color: #6b7280;" +
+                        "color: #4b5563;" +
                         "margin-bottom: 30px;" +
-                        "text-align: center;" +
+                        "text-align: justify;" +
                         "line-height: 1.7;" +
                     "}" +
                     
                     ".cta-container {" +
                         "text-align: center;" +
-                        "margin: 40px 0;" +
+                        "margin: 30px 0;" +
                     "}" +
                     
                     ".cta-button {" +
                         "display: inline-block;" +
-                        "background: linear-gradient(135deg, #10b981 0%, #059669 50%, #7c3aed 100%);" +
+                        "background-color: #7c3aed;" +
                         "color: white;" +
                         "text-decoration: none;" +
-                        "padding: 16px 32px;" +
-                        "border-radius: 12px;" +
+                        "padding: 14px 28px;" +
+                        "border-radius: 8px;" +
                         "font-weight: 600;" +
                         "font-size: 16px;" +
-                        "box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);" +
-                        "transition: all 0.3s ease;" +
-                        "border: none;" +
-                        "cursor: pointer;" +
-                        "position: relative;" +
-                        "overflow: hidden;" +
-                    "}" +
-                    
-                    ".cta-button::before {" +
-                        "content: '';" +
-                        "position: absolute;" +
-                        "top: 0;" +
-                        "left: -100%;" +
-                        "width: 100%;" +
-                        "height: 100%;" +
-                        "background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);" +
-                        "transition: left 0.5s;" +
-                    "}" +
-                    
-                    ".cta-button:hover::before {" +
-                        "left: 100%;" +
+                        "transition: background-color 0.3s ease;" +
                     "}" +
                     
                     ".cta-button:hover {" +
-                        "transform: translateY(-2px);" +
-                        "box-shadow: 0 15px 35px rgba(16, 185, 129, 0.4);" +
+                        "background-color: #6d28d9;" +
                     "}" +
                     
                     ".security-notice {" +
-                        "background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);" +
+                        "background-color: #fef3c7;" +
                         "border: 1px solid #f59e0b;" +
-                        "border-radius: 12px;" +
+                        "border-radius: 8px;" +
                         "padding: 20px;" +
-                        "margin: 30px 0;" +
-                        "position: relative;" +
-                    "}" +
-                    
-                    ".security-notice::before {" +
-                        "content: '🔒';" +
-                        "position: absolute;" +
-                        "top: -10px;" +
-                        "left: 20px;" +
-                        "background: #f59e0b;" +
-                        "color: white;" +
-                        "width: 30px;" +
-                        "height: 30px;" +
-                        "border-radius: 50%;" +
-                        "display: flex;" +
-                        "align-items: center;" +
-                        "justify-content: center;" +
-                        "font-size: 14px;" +
+                        "margin: 25px 0;" +
                     "}" +
                     
                     ".security-title {" +
                         "font-weight: 600;" +
                         "color: #92400e;" +
-                        "margin-bottom: 8px;" +
-                        "margin-top: 10px;" +
+                        "margin-bottom: 10px;" +
+                        "font-size: 16px;" +
                     "}" +
                     
                     ".security-text {" +
                         "color: #b45309;" +
                         "font-size: 14px;" +
-                        "line-height: 1.5;" +
-                    "}" +
-                    
-                    ".footer {" +
-                        "background: #f9fafb;" +
-                        "padding: 30px;" +
-                        "text-align: center;" +
-                        "border-top: 1px solid #e5e7eb;" +
-                    "}" +
-                    
-                    ".footer-text {" +
-                        "color: #6b7280;" +
-                        "font-size: 14px;" +
-                        "margin-bottom: 15px;" +
-                    "}" +
-                    
-                    ".footer-links {" +
-                        "display: flex;" +
-                        "justify-content: center;" +
-                        "gap: 20px;" +
-                        "flex-wrap: wrap;" +
-                    "}" +
-                    
-                    ".footer-link {" +
-                        "color: #7c3aed;" +
-                        "text-decoration: none;" +
-                        "font-size: 14px;" +
-                        "font-weight: 500;" +
-                        "transition: color 0.3s ease;" +
-                    "}" +
-                    
-                    ".footer-link:hover {" +
-                        "color: #5b21b6;" +
+                        "line-height: 1.6;" +
+                        "text-align: justify;" +
                     "}" +
                     
                     ".divider {" +
                         "height: 1px;" +
-                        "background: linear-gradient(90deg, transparent, #e5e7eb, transparent);" +
-                        "margin: 30px 0;" +
+                        "background-color: #e5e7eb;" +
+                        "margin: 25px 0;" +
                     "}" +
                     
                     "@media (max-width: 600px) {" +
                         ".container {" +
                             "margin: 10px;" +
-                            "border-radius: 15px;" +
+                            "border-radius: 8px;" +
                         "}" +
                         
-                        ".header, .content, .footer {" +
+                        ".header, .content {" +
                             "padding: 25px 20px;" +
                         "}" +
                         
                         ".logo-text {" +
-                            "font-size: 28px;" +
+                            "font-size: 24px;" +
                         "}" +
                         
                         ".greeting {" +
-                            "font-size: 22px;" +
+                            "font-size: 20px;" +
                         "}" +
                         
                         ".cta-button {" +
-                            "padding: 14px 28px;" +
+                            "padding: 12px 24px;" +
                             "font-size: 15px;" +
-                        "}" +
-                        
-                        ".footer-links {" +
-                            "flex-direction: column;" +
-                            "gap: 10px;" +
                         "}" +
                     "}" +
                 "</style>" +
@@ -287,7 +187,8 @@ public class EmailTemplateBuilder {
                         
                         "<div class=\"message\">" +
                             "Recibimos una solicitud para restablecer la contraseña de tu cuenta en SkillLink. " +
-                            "Si fuiste tú quien solicitó este cambio, haz clic en el botón de abajo para crear una nueva contraseña." +
+                            "Si fuiste tú quien solicitó este cambio, haz clic en el botón de abajo para crear una nueva contraseña. " +
+                            "Este proceso es completamente seguro y te permitirá acceder nuevamente a tu cuenta." +
                         "</div>" +
                         
                         "<div class=\"cta-container\">" +
@@ -299,28 +200,17 @@ public class EmailTemplateBuilder {
                         "<div class=\"security-notice\">" +
                             "<div class=\"security-title\">Información de seguridad</div>" +
                             "<div class=\"security-text\">" +
-                                "• Este enlace expirará en 15 minutos por tu seguridad<br>" +
-                                "• Si no solicitaste este cambio, puedes ignorar este correo<br>" +
-                                "• Nunca compartas este enlace con otras personas" +
+                                "Este enlace de recuperación expirará automáticamente en 15 minutos por tu seguridad. " +
+                                "Si no solicitaste este cambio de contraseña, puedes ignorar este correo electrónico de forma segura. " +
+                                "Tu cuenta permanecerá protegida y no se realizarán cambios. " +
+                                "Por tu seguridad, nunca compartas este enlace con otras personas." +
                             "</div>" +
                         "</div>" +
                         
                         "<div class=\"divider\"></div>" +
                         
-                        "<div class=\"message\" style=\"font-size: 14px; color: #9ca3af;\">" +
-                            "Si el botón no funciona, copia y pega este enlace en tu navegador:<br>" +
-                            "<a href=\"" + enlaceRecuperacion + "\" style=\"color: #7c3aed; word-break: break-all;\">" + enlaceRecuperacion + "</a>" +
-                        "</div>" +
-                    "</div>" +
-                    
-                    "<div class=\"footer\">" +
-                        "<div class=\"footer-text\">" +
-                            "Este correo fue enviado desde SkillLink - Plataforma Emprendedora" +
-                        "</div>" +
-                        "<div class=\"footer-links\">" +
-                            "<a href=\"#\" class=\"footer-link\">Centro de Ayuda</a>" +
-                            "<a href=\"#\" class=\"footer-link\">Política de Privacidad</a>" +
-                            "<a href=\"#\" class=\"footer-link\">Términos de Servicio</a>" +
+                        "<div class=\"message\" style=\"font-size: 14px; color: #6b7280; text-align: center;\">" +
+                            "Si tienes problemas para acceder al enlace, contacta a nuestro equipo de soporte." +
                         "</div>" +
                     "</div>" +
                 "</div>" +
